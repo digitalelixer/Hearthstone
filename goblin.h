@@ -1,7 +1,6 @@
 #ifndef GOBLIN_H
 #define GOBLIN_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;

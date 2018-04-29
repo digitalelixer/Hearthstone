@@ -1,5 +1,11 @@
 #include "goblin.h"
 
+const string NAME = "Goblin";
+const int MANACOST = 1;
+const int ATTACK = 200;
+const int DEFENSE = 100;
+
+Goblin::Goblin(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
 
 string Goblin::render(int line){
     

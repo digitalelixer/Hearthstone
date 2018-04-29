@@ -7,6 +7,7 @@ Card::Card(string cardName, int mCost, int atk, int def){
 	this.manaCost = (mCost < 1)? 1 : mCost;
 	this.attack = (atk < 1)? 1 : atk;
 	this.defense = (def < 1)? 1 : def;
+	this.exhausted = true;
 }
 
 string Card::render(int line){
@@ -36,8 +37,9 @@ int getDefense(void){
 	return this.defense;
 }
 bool isExhausted(void){
-	return false;
+	return this.exhausted;
 }
-void unExhaust(void);
+void unExhaust(void){
+	this.exhausted = false;
 	return;
 }
