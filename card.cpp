@@ -2,6 +2,13 @@
 
 using namespace std;
 
+Card::Card(string cardName, int mCost, int atk, int def){
+	this.name = cardName;
+	this.manaCost = (mCost < 1)? 1 : mCost;
+	this.attack = (atk < 1)? 1 : atk;
+	this.defense = (def < 1)? 1 : def;
+}
+
 string Card::render(int line){
     switch(line){
         case 0: return ".___________.";
@@ -15,4 +22,22 @@ string Card::render(int line){
         default:
             return " ";
     }
+
+string getName(void){
+	return this.name;
+}
+int getManaCost(void){
+	return this.manaCost;
+}
+int getAttack(void){
+	return this.attack;
+}
+int getDefense(void){
+	return this.defense;
+}
+bool isExhausted(void){
+	return false;
+}
+void unExhaust(void);
+	return;
 }
