@@ -1,7 +1,6 @@
 #ifndef EVILEYE_H
 #define EVILEYE_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;

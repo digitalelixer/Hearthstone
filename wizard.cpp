@@ -1,5 +1,11 @@
 #include "wizard.h"
 
+const string NAME = "Wizard";
+const int MANACOST = 4;
+const int ATTACK = 500;
+const int DEFENSE = 100;
+
+Wizard::Wizard(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
 
 string Wizard::render(int line){
     

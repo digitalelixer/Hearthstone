@@ -1,7 +1,6 @@
 #ifndef WIZARD_H
 #define WIZARD_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;

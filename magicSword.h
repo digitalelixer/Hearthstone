@@ -1,7 +1,6 @@
 #ifndef MAGICSWORD_H
 #define MAGICSWORD_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;

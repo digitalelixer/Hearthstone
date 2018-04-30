@@ -1,5 +1,11 @@
 #include "evilEye.h"
 
+const string NAME = "Evil Eye";
+const int MANACOST = 4;
+const int ATTACK = 400;
+const int DEFENSE = 200;
+
+EvilEye::EvilEye(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
 
 string EvilEye::render(int line){
     

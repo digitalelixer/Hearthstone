@@ -1,7 +1,6 @@
 #ifndef GOLEM_H
 #define GOLEM_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;

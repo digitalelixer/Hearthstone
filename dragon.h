@@ -1,7 +1,6 @@
 #ifndef DRAGON_H
 #define DRAGON_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;
