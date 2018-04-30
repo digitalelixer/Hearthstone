@@ -1,7 +1,6 @@
 #ifndef HOBGOBLIN_H
 #define HOBGOBLIN_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;

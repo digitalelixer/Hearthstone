@@ -1,5 +1,11 @@
 #include "wargWolf.h"
 
+const string NAME = "Warg Wolf";
+const int MANACOST = 1;
+const int ATTACK = 100;
+const int DEFENSE = 100;
+
+WargWolf::WargWolf(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
 
 string WargWolf::render(int line){
     

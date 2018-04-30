@@ -1,5 +1,11 @@
 #include "dragon.h"
 
+const string NAME = "Dragon";
+const int MANACOST = 6;
+const int ATTACK = 500;
+const int DEFENSE = 500;
+
+Dragon::Dragon(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
 
 string Dragon::render(int line){
     

@@ -1,5 +1,11 @@
 #include "golem.h"
 
+const string NAME = "Golem";
+const int MANACOST = 3;
+const int ATTACK = 100;
+const int DEFENSE = 400;
+
+Golem::Golem(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
 
 string Golem::render(int line){
     

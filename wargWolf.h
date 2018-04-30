@@ -1,7 +1,6 @@
 #ifndef WARGWOLF_H
 #define WARGWOLF_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;

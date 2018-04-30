@@ -1,7 +1,6 @@
 #ifndef DIRERABBIT_H
 #define DIRERABBIT_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;

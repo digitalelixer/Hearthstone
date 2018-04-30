@@ -1,5 +1,11 @@
 #include "hobgoblin.h"
 
+const string NAME = "Hobgoblin";
+const int MANACOST = 2;
+const int ATTACK = 300;
+const int DEFENSE = 200;
+
+Hobgoblin::Hobgoblin(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
 
 string Hobgoblin::render(int line){
     

@@ -1,7 +1,6 @@
 #ifndef WRAITH_H
 #define WRAITH_H
 
-#include <iostream>
 #include "card.h"
 
 using namespace std;
