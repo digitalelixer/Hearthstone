@@ -2,7 +2,73 @@
 
 using namespace std;
 
+Board::Board(void){
+	this.hp = 2000;
+}
 
+void addToDeckList(Card* card){
+	this.deck.push_back(card);
+	return;
+}
+
+
+/*FIXME*/
+void draw(int numCards){
+	if(!(this.deck.empty()) && (numCards > 0) && (numCards <= this.deck.size())){
+
+		while(this.deck.size() > numCards){
+
+			Card* temp = this.field.back();
+			this.hand.push_back(temp);
+			this.deck.pop_back();
+
+		}
+
+	}
+
+	return;
+}
+
+void playCardFromHand(int cNum);
+
+Card* getCardOnField(int cNum);
+
+Card* getCardInHand(int cNum);
+
+int getHP(void){
+	return this.hp;
+}
+
+void setHP(int hVal){
+	this.hp = (hVal < 0)? 0 : hVal;
+	return;
+}
+
+int getHandSize(void){
+	return this.hand.size();
+}
+
+int getFieldSize(void){
+	return this.field.size();
+}
+
+int getMana(void){
+	return this.mana;
+}
+
+void setMana(int mVal){
+	this.mana = (mval < 0)? 0 : mVal;
+	return;
+}
+
+void discardCardFromField(int cNum){
+	if(!(this.field.empty()) && (cNum > 0) && (cNum <= this.field.size())){
+		Card* temp = this.field.at(cNum);
+		this.discard.push_back(temp);
+		this.field.erase(cNum);
+	}
+	return;
+}
 
 void Board::shuffleDeck(void){
     Card * temp;
