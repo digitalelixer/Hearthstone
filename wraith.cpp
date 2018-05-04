@@ -5,7 +5,7 @@ const int MANACOST = 3;
 const int ATTACK = 300;
 const int DEFENSE = 300;
 
-Goblin::Goblin(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
+Wraith::Wraith(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
 
 string Wraith::render(int line){
     

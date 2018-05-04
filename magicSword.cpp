@@ -5,7 +5,7 @@ const int MANACOST = 5;
 const int ATTACK = 500;
 const int DEFENSE = 300;
 
-MagicSword::MagicSword(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }'
+MagicSword::MagicSword(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
 
 string MagicSword::render(int line){
     

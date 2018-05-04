@@ -5,7 +5,7 @@
 
 using namespace std;
 
-class hobgoblin : public Card {
+class Hobgoblin : public Card {
     private:
     
     public:
