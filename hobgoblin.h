@@ -5,12 +5,12 @@
 
 using namespace std;
 
-class Hobgoblin : public Card {
+class hobgoblin : public Card {
     private:
     
     public:
     
-    hobgoblin(void);
+    Hobgoblin(void);
     virtual string render(int);
 };
 

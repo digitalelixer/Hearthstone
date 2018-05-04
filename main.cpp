@@ -12,6 +12,7 @@ void renderBoard(Board&, Board&);
 
 int main(int argc, char * arv[]){
     srand(time(0));
+    int turn = 1;
     
     // Set up Player board
     Board pb;
@@ -49,7 +50,7 @@ void getOpponentAction(Board & playerBoard, Board & opponentBoard){
     // Go through hand and play cards that the opponent can afford to play
     for(int i = 0; i < opponentBoard.getHandSize(); i++){
         if(opponentBoard.getCardInHand(i)->getManaCost() <= opponentBoard.getMana()){
-            opponentBoard.playCardFromHand(opponentBoard, i);
+            opponentBoard.playCardFromHand(/*opponentBoard,*/ i);
         }
         renderBoard(playerBoard, opponentBoard);
     }

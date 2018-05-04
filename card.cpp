@@ -1,13 +1,11 @@
 #include "card.h"
 
-using namespace std;
-
 Card::Card(string cardName, int mCost, int atk, int def){
-	this.name = cardName;
-	this.manaCost = (mCost < 1)? 1 : mCost;
-	this.attack = (atk < 1)? 1 : atk;
-	this.defense = (def < 1)? 1 : def;
-	this.exhausted = true;
+	name = cardName;
+	manaCost = (mCost < 1)? 1 : mCost;
+	attack = (atk < 1)? 1 : atk;
+	defense = (def < 1)? 1 : def;
+	exhausted = true;
 }
 
 string Card::render(int line){
@@ -23,23 +21,24 @@ string Card::render(int line){
         default:
             return " ";
     }
+}
 
-string getName(void){
-	return this.name;
+string Card::getName(void){
+	return name;
 }
-int getManaCost(void){
-	return this.manaCost;
+int Card::getManaCost(void){
+	return manaCost;
 }
-int getAttack(void){
-	return this.attack;
+int Card::getAttack(void){
+	return attack;
 }
-int getDefense(void){
-	return this.defense;
+int Card::getDefense(void){
+	return defense;
 }
-bool isExhausted(void){
-	return this.exhausted;
+bool Card::isExhausted(void){
+	return exhausted;
 }
-void unExhaust(void){
-	this.exhausted = false;
+void Card::unExhaust(void){
+	exhausted = false;
 	return;
 }

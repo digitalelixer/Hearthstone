@@ -3,24 +3,25 @@
 using namespace std;
 
 Board::Board(void){
-	this.hp = 2000;
+	hp = 2000;
 }
 
-void addToDeckList(Card* card){
-	this.deck.push_back(card);
+void Board::addToDeckList(Card* card){
+	deck.push_back(card);
 	return;
 }
 
 
 /*FIXME*/
-void draw(int numCards){
-	if(!(this.deck.empty()) && (numCards > 0) && (numCards <= this.deck.size())){
+void Board::draw(int numCards){
 
-		while(this.deck.size() > numCards){
+	if(!(deck.empty()) && (numCards > 0) && (numCards <= deck.size())){
 
-			Card* temp = this.field.back();
-			this.hand.push_back(temp);
-			this.deck.pop_back();
+		while(deck.size() > numCards){
+
+			Card* temp = field.back();
+			hand.push_back(temp);
+			deck.pop_back();
 
 		}
 
@@ -29,43 +30,74 @@ void draw(int numCards){
 	return;
 }
 
-void playCardFromHand(int cNum);
+void Board::playCardFromHand(int cNum){
 
-Card* getCardOnField(int cNum);
+	if(!(field.empty()) && (cNum > 0) && (cNum <= field.size())){
 
-Card* getCardInHand(int cNum);
+		setMana(getMana() - hand.at(cNum)->getManaCost());
 
-int getHP(void){
-	return this.hp;
-}
+	}
 
-void setHP(int hVal){
-	this.hp = (hVal < 0)? 0 : hVal;
 	return;
 }
 
-int getHandSize(void){
-	return this.hand.size();
+Card* Board::getCardOnField(int cNum){
+
+	if(!(field.empty()) && (cNum > 0) && (cNum <= field.size())){
+
+		return field.at(cNum);
+
+	} else {
+
+		return nullptr;
+
+	}
 }
 
-int getFieldSize(void){
-	return this.field.size();
+Card* Board::getCardInHand(int cNum){
+
+	if(!(hand.empty()) && (cNum > 0) && (cNum <= hand.size())){
+
+		return hand.at(cNum);
+
+	} else {
+
+		return nullptr;
+
+	}
 }
 
-int getMana(void){
-	return this.mana;
+int Board::getHP(void){
+	return hp;
 }
 
-void setMana(int mVal){
-	this.mana = (mval < 0)? 0 : mVal;
+void Board::setHP(int hVal){
+	hp = (hVal < 0)? 0 : hVal;
 	return;
 }
 
-void discardCardFromField(int cNum){
-	if(!(this.field.empty()) && (cNum > 0) && (cNum <= this.field.size())){
-		Card* temp = this.field.at(cNum);
-		this.discard.push_back(temp);
-		this.field.erase(cNum);
+int Board::getHandSize(void){
+	return hand.size();
+}
+
+int Board::getFieldSize(void){
+	return field.size();
+}
+
+int Board::getMana(void){
+	return mana;
+}
+
+void Board::setMana(int mVal){
+	mana = (mVal < 0)? 0 : mVal;
+	return;
+}
+
+void Board::discardCardFromField(int cNum){
+	if(!(field.empty()) && (cNum > 0) && (cNum <= field.size())){
+		Card* temp = field.at(cNum);
+		discard.push_back(temp);
+		field.erase(field.begin() + (cNum - 1));
 	}
 	return;
 }
