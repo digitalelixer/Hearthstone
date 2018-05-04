@@ -120,6 +120,18 @@ class Board{
          * Mutator function for mana.
          */
         void setMana(int);
+
+        /* getMaxMana
+         *
+         * Returns the maximum amount of mana available.
+         */
+        int getMaxMana(void);
+        
+        /* setMaxMana
+         *
+         * Mutator function for maxMana.
+         */
+        void setMaxMana(int);
         
         /* discardCardFromField
          *

@@ -3,7 +3,7 @@
 using namespace std;
 
 Board::Board(void){
-	hp = 2000;
+	setHP(2000);
 }
 
 void Board::addToDeckList(Card* card){
@@ -17,9 +17,11 @@ void Board::draw(int numCards){
 
 	if(!(deck.empty()) && (numCards > 0) && (numCards <= deck.size())){
 
-		while(deck.size() > numCards){
+		Card* temp;
 
-			Card* temp = field.back();
+		for(int i = 0; i < numCards; i++){
+
+			temp = deck.back();
 			hand.push_back(temp);
 			deck.pop_back();
 
@@ -32,9 +34,14 @@ void Board::draw(int numCards){
 
 void Board::playCardFromHand(int cNum){
 
-	if(!(field.empty()) && (cNum > 0) && (cNum <= field.size())){
+	if(!(hand.empty()) && (cNum >= 0) && (cNum < hand.size())){
 
 		setMana(getMana() - hand.at(cNum)->getManaCost());
+		
+		Card* temp = hand.at(cNum);
+		field.push_back(temp);
+		cout << "Problem is in playCardFromHand" << endl;
+		hand.erase(hand.begin() + cNum);
 
 	}
 
@@ -43,26 +50,18 @@ void Board::playCardFromHand(int cNum){
 
 Card* Board::getCardOnField(int cNum){
 
-	if(!(field.empty()) && (cNum > 0) && (cNum <= field.size())){
+	if(!(field.empty()) && (cNum >= 0) && (cNum < field.size())){
 
 		return field.at(cNum);
-
-	} else {
-
-		return nullptr;
 
 	}
 }
 
 Card* Board::getCardInHand(int cNum){
 
-	if(!(hand.empty()) && (cNum > 0) && (cNum <= hand.size())){
+	if(!(hand.empty()) && (cNum >= 0) && (cNum < hand.size())){
 
 		return hand.at(cNum);
-
-	} else {
-
-		return nullptr;
 
 	}
 }
@@ -89,15 +88,24 @@ int Board::getMana(void){
 }
 
 void Board::setMana(int mVal){
-	mana = (mVal < 0)? 0 : mVal;
+	mana = (mVal < 0 || mVal > maxMana)? 0 : mVal;
+	return;
+}
+
+int Board::getMaxMana(void){
+	return maxMana;
+}
+
+void Board::setMaxMana(int turnNumber){
+	maxMana = (turnNumber < 1)? 1 : turnNumber;
 	return;
 }
 
 void Board::discardCardFromField(int cNum){
-	if(!(field.empty()) && (cNum > 0) && (cNum <= field.size())){
+	if(!(field.empty()) && (cNum >= 0) && (cNum < field.size())){
 		Card* temp = field.at(cNum);
 		discard.push_back(temp);
-		field.erase(field.begin() + (cNum - 1));
+		field.erase(field.begin() + cNum);
 	}
 	return;
 }
