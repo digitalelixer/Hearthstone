@@ -2,7 +2,7 @@
 
 const string NAME = "Evil Eye";
 const int MANACOST = 4;
-const int ATTACK = 400;
+const int ATTACK = 450;
 const int DEFENSE = 200;
 
 EvilEye::EvilEye(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
@@ -16,7 +16,7 @@ string EvilEye::render(int line){
         case 3: return "|  |_____|  |";
         case 4: return "|  | [_] |  |";
         case 5: return "|  |_____|  |";
-        case 6: return "|  400/200  |";
+        case 6: return "|  450/200  |";
         case 7: return "|___________|";
         default:
             return " ";

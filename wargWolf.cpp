@@ -2,7 +2,7 @@
 
 const string NAME = "Warg Wolf";
 const int MANACOST = 1;
-const int ATTACK = 100;
+const int ATTACK = 150;
 const int DEFENSE = 100;
 
 WargWolf::WargWolf(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
@@ -16,7 +16,7 @@ string WargWolf::render(int line){
         case 3: return "|  | o o |  |";
         case 4: return "|  |_   _|  |";
         case 5: return "|    |_|    |";
-        case 6: return "|  100/100  |";
+        case 6: return "|  150/100  |";
         case 7: return "|___________|";
         default:
             return " ";

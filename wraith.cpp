@@ -2,7 +2,7 @@
 
 const string NAME = "Wraith";
 const int MANACOST = 3;
-const int ATTACK = 300;
+const int ATTACK = 350;
 const int DEFENSE = 300;
 
 Wraith::Wraith(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
@@ -16,7 +16,7 @@ string Wraith::render(int line){
         case 3: return "|  | 0 0 |  |";
         case 4: return "|  |  o  |  |";
         case 5: return "|  |_____|  |";
-        case 6: return "|  300/300  |";
+        case 6: return "|  350/300  |";
         case 7: return "|___________|";
         default:
             return " ";

@@ -2,7 +2,7 @@
 
 const string NAME = "Golem";
 const int MANACOST = 3;
-const int ATTACK = 100;
+const int ATTACK = 150;
 const int DEFENSE = 400;
 
 Golem::Golem(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
@@ -16,7 +16,7 @@ string Golem::render(int line){
         case 3: return "|  |[] []|  |";
         case 4: return "|  |     |  |";
         case 5: return "|  |_===_|  |";
-        case 6: return "|  100/400  |";
+        case 6: return "|  150/400  |";
         case 7: return "|___________|";
         default:
             return " ";

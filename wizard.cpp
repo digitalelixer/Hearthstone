@@ -2,7 +2,7 @@
 
 const string NAME = "Wizard";
 const int MANACOST = 4;
-const int ATTACK = 500;
+const int ATTACK = 550;
 const int DEFENSE = 100;
 
 Wizard::Wizard(void) : Card(NAME, MANACOST, ATTACK, DEFENSE){ }
@@ -16,7 +16,7 @@ string Wizard::render(int line){
         case 3: return "| --------- |";
         case 4: return "|  | 0 0 |  |";
         case 5: return "|   |_-_|   |";
-        case 6: return "|  500/100  |";
+        case 6: return "|  550/100  |";
         case 7: return "|___________|";
         default:
             return " ";
