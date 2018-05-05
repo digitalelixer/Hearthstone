@@ -11,8 +11,6 @@ void Board::addToDeckList(Card* card){
 	return;
 }
 
-
-/*FIXME*/
 void Board::draw(int numCards){
 
 	if(!(deck.empty()) && (numCards > 0) && (numCards <= deck.size())){
@@ -40,9 +38,11 @@ void Board::playCardFromHand(int cNum){
 		
 		Card* temp = hand.at(cNum);
 		field.push_back(temp);
-		cout << "Problem is in playCardFromHand" << endl;
+		
 		hand.erase(hand.begin() + cNum);
 
+	} else {
+		cout << "Problem is in playCardFromHand" << endl;
 	}
 
 	return;
@@ -54,6 +54,8 @@ Card* Board::getCardOnField(int cNum){
 
 		return field.at(cNum);
 
+	} else {
+		cout << "Problem is in getCardOnField" << endl;
 	}
 }
 
@@ -63,6 +65,8 @@ Card* Board::getCardInHand(int cNum){
 
 		return hand.at(cNum);
 
+	} else {
+		cout << "Problem is in getCardInHand" << endl;
 	}
 }
 
@@ -107,6 +111,17 @@ void Board::discardCardFromField(int cNum){
 		discard.push_back(temp);
 		field.erase(field.begin() + cNum);
 	}
+	return;
+}
+
+void Board::unExhaustField(void){
+
+	for(int i = 0; i < field.size(); i++){
+
+		field[i]->unExhaust();
+
+	}
+
 	return;
 }
 

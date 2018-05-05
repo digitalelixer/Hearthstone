@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -23,6 +24,10 @@ using namespace std;
 void getOpponentAction(Board&, Board&);
 void renderBoard(Board&, Board&);
 void createRandomDeck(Board&);
+int getMenuChoice(int);
+void getPlayerAction(Board&, Board&, int);
+int getHandChoice(Board&);
+//int getFieldChoice(void);
 
 int main(int argc, char * arv[]){
     srand(time(0));
@@ -32,7 +37,7 @@ int main(int argc, char * arv[]){
     Board pb;
     // Create player deck and draw initial hand here:
 	createRandomDeck(pb);
-	pb.draw(1);
+	pb.draw(10);
 	cout << "Made it past player board setup" << endl;
     // Set up opponent board
     Board ob;
@@ -50,10 +55,15 @@ int main(int argc, char * arv[]){
 		ob.setMana(turn);
 
 		cout << "Made it into while loop" << endl;
-		//getOpponentAction(ob, pb);
+
+		getPlayerAction(pb, ob, turn);
 		getOpponentAction(pb, ob);
 
-		cout << "End of turn #" + turn << endl;
+		pb.draw(1);
+		ob.draw(1);
+
+		cout << "End of turn #" << turn << endl;
+		system("sleep 2");
         turn++;
     }
     
@@ -79,7 +89,7 @@ void getOpponentAction(Board & playerBoard, Board & opponentBoard){
     // Go through hand and play cards that the opponent can afford to play
     for(int i = 0; i < opponentBoard.getHandSize(); i++){
 
-
+		cout << "Made it here #1" << endl;
         if(opponentBoard.getCardInHand(i)->getManaCost() <= opponentBoard.getMana()){
             opponentBoard.playCardFromHand(/*opponentBoard,*/ i);
 			cout << "Made it here #2" << endl;
@@ -187,17 +197,120 @@ void createRandomDeck(Board& targetBoard){
 		targetBoard.addToDeckList(newCard);
 
 	}
+
+	targetBoard.shuffleDeck();
 	
 
 	return;
 }
 
+int getMenuChoice(int turnNumber){
+
+	int playerChoice;
+
+	while(true){
+
+		cout << "Turn Number: " << turnNumber << endl;
+		cout << "What would you like to do?" << endl;
+		cout << "0: Play Card from Hand" << endl;
+		cout << "1: Attack with Creature" << endl;
+		cout << "2: End Turn" << endl;
+
+		cin >> playerChoice;
+
+		if(playerChoice == 0 || playerChoice == 1 || playerChoice == 2){
+
+			break;
+
+		} else {
+
+			cout << "Error! Please select a valid option" << endl;
+
+		}
+
+	}
+
+	return playerChoice;
+}
+
+void getPlayerAction(Board& playerBoard, Board& opponentBoard, int turnNumber){
+
+	int option = getMenuChoice(turnNumber);
+
+	switch(option){
+
+		case 0:
+			// Play Card from Hand
+			playerBoard.playCardFromHand(getHandChoice(playerBoard));
+			break;
+
+		case 1:
+			// Attack with Creature
+			break;
+
+		case 2:
+			// End Turn
+			
+			break;
+
+		default:
+			break;
+
+	}
+	
+
+	return;
+}
+
+int getHandChoice(Board& playerBoard){
+
+	int playerChoice;
+	Card* targetCard;
+
+	while(true){
+
+		cout << "Please select a card to play:" << endl;
+		cout << "Card #|----Name----| Mana Cost | Attack | Defense |" << endl;
+
+		for(int i = 0; i < playerBoard.getHandSize(); i++){
+
+			targetCard = playerBoard.getCardInHand(i);
+
+			cout << left << setw(6) << setfill('.') << i + 1;
+			cout << setw(1) << "|" << setfill(' ') << setw(12) << targetCard->getName();
+			cout << right << setw(1) << "|" << setw(10) << targetCard->getManaCost();
+			cout << setw(1) << " |" << setw(7) << targetCard->getAttack();
+			cout << setw(1) << " |" << setw(8) << targetCard->getDefense();
+			cout << setw(1) << " |" << endl;
+
+		}
+
+		cin >> playerChoice;
+
+		if((playerChoice > 0) && (playerChoice <= playerBoard.getHandSize()) && (playerBoard.getCardInHand(playerChoice - 1)->getManaCost() <= playerBoard.getMana())){
+
+			break;
+
+		} else {
+
+			cout << "Error! Please select a valid option" << endl;
+
+		}
+
+	}
+
+	return playerChoice - 1;
+}
 
 
-
-
-
-
+/*
+			cout << "Card " << setw(2) << i;
+			cout << " | Name: " << setw(10) << targetCard->getName();
+			cout << " | Mana Cost: " << setw(2) << targetCard->getManaCost();
+			cout << " | Attack: " << setw(4) << targetCard->getAttack();
+			cout << " | Defense: " << setw(4) << targetCard->getDefense();
+			cout << endl;
+*/
 
 
 
