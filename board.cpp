@@ -33,13 +33,13 @@ void Board::draw(int numCards){
 void Board::playCardFromHand(int cNum){
 
 	if(!(hand.empty()) && (cNum >= 0) && (cNum < hand.size())){
-
-		setMana(getMana() - hand.at(cNum)->getManaCost());
 		
 		Card* temp = hand.at(cNum);
 		field.push_back(temp);
 		
 		hand.erase(hand.begin() + cNum);
+
+		setMana(getMana() - hand.at(cNum)->getManaCost());
 
 	} else {
 		cout << "Problem is in playCardFromHand" << endl;
