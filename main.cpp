@@ -23,11 +23,12 @@ using namespace std;
 
 void getOpponentAction(Board&, Board&);
 void renderBoard(Board&, Board&);
-void createRandomDeck(Board&);
-int getMenuChoice(Board&, int);
 void getPlayerAction(Board&, Board&, int);
+int getMenuChoice(Board&, int);
 int getHandChoice(Board&);
 int getFieldChoice(Board&);
+int getOpponentFieldTarget(Card*, Board&);
+void createRandomDeck(Board&);
 
 int main(int argc, char * arv[]){
     srand(time(0));
@@ -52,9 +53,7 @@ int main(int argc, char * arv[]){
 		ob.setMaxMana(turn);
 		ob.setMana(turn);
 
-		renderBoard(pb, ob);
 		getPlayerAction(pb, ob, turn);
-//		renderBoard(pb, ob);
 		getOpponentAction(pb, ob);
 
 		pb.unExhaustField();
@@ -63,8 +62,7 @@ int main(int argc, char * arv[]){
 		pb.draw(1);
 		ob.draw(1);
 
-		cout << "End of turn #" << turn << endl;
-		system("sleep 2");
+		system("sleep 1");
         turn++;
     }
     
@@ -90,12 +88,9 @@ void getOpponentAction(Board & playerBoard, Board & opponentBoard){
     // Go through hand and play cards that the opponent can afford to play
     for(int i = 0; i < opponentBoard.getHandSize(); i++){
 
-		cout << "Made it here #1" << endl;
         if(opponentBoard.getCardInHand(i)->getManaCost() <= opponentBoard.getMana()){
             opponentBoard.playCardFromHand(/*opponentBoard,*/ i);
-			cout << "Made it here #2" << endl;
         }
-		cout << "Made it here #3" << endl;
         renderBoard(playerBoard, opponentBoard);
     }
 	//cout << "Made it out of card search" << endl;
@@ -122,10 +117,303 @@ void getOpponentAction(Board & playerBoard, Board & opponentBoard){
                 cout << "Opponent's " << opponentBoard.getCardOnField(i)->getName() << " attacks you directly for " << opponentBoard.getCardOnField(i)->getAttack() << " damage!" << endl;
                 playerBoard.setHP(playerBoard.getHP() - opponentBoard.getCardOnField(i)->getAttack());
             }
+			opponentBoard.getCardOnField(i)->setExhausted();
         }
                 
     }
 	system("sleep 2");
+}
+
+void getPlayerAction(Board& playerBoard, Board& opponentBoard, int turnNumber){
+
+	int option;
+	int handChoice;
+	int attackChoice;
+	int targetIndex;
+	bool turnNotOver = true;
+
+	while(turnNotOver){
+
+		renderBoard(playerBoard, opponentBoard);
+		option = getMenuChoice(playerBoard, turnNumber);
+
+		switch(option){
+
+			case 0:
+				// Play Card from Hand
+				handChoice = getHandChoice(playerBoard);
+				if(handChoice == -1){
+					break;
+				} else {
+					playerBoard.playCardFromHand(handChoice);
+				}
+				break;
+
+			case 1:
+				// Attack with Creature
+				attackChoice = getFieldChoice(playerBoard);
+				if(attackChoice == -1){
+					break;
+				} else {
+					// get target for attack
+					// look through all cards on player's board. If the card is capable of killing one of those, it will chose the first one as its target
+					targetIndex = getOpponentFieldTarget(playerBoard.getCardOnField(attackChoice), opponentBoard);
+					if(targetIndex == -1){
+						break;
+					} 
+					if(targetIndex != -5){
+						// destory creature
+						cout << "Your " << playerBoard.getCardOnField(attackChoice)->getName() << " destoryed your opponent's " << opponentBoard.getCardOnField(targetIndex)->getName() << "!" << endl;
+						opponentBoard.discardCardFromField(targetIndex);
+//						renderBoard(playerBoard, opponentBoard);
+					} else {
+						// player's creature attacks opponent directly
+						cout << "Your " << playerBoard.getCardOnField(attackChoice)->getName() << " attacks your opponent directly for " << playerBoard.getCardOnField(attackChoice)->getAttack() << " damage!" << endl;
+						opponentBoard.setHP(opponentBoard.getHP() - playerBoard.getCardOnField(attackChoice)->getAttack());
+//						renderBoard(playerBoard, opponentBoard);
+					}
+					playerBoard.getCardOnField(attackChoice)->setExhausted();
+				}
+				break;
+
+			case 2:
+				// End Turn
+				turnNotOver = false;
+				break;
+
+			default:
+				break;
+
+		}
+	}
+	
+
+	return;
+}
+
+int getMenuChoice(Board& playerBoard, int turnNumber){
+
+	int playerChoice;
+
+	while(true){
+
+		cout << "Turn Number: " << turnNumber << endl;
+		cout << "What would you like to do?" << endl;
+
+		if((playerBoard.getHandSize() > 0) && (playerBoard.getMana() > 0)){
+
+			cout << "0: Play Card from Hand" << endl;
+
+		}
+
+		if((playerBoard.getFieldSize() > 0) && (turnNumber != 1)){
+
+			cout << "1: Attack with Creature" << endl;
+
+		}
+
+		cout << "2: End Turn" << endl;
+
+		cin >> playerChoice;
+
+		if(playerChoice == 0 || playerChoice == 1 || playerChoice == 2){
+
+			break;
+
+		} else {
+
+			cout << "Error! Please select a valid option" << endl;
+
+		}
+
+	}
+
+	return playerChoice;
+}
+
+int getHandChoice(Board& playerBoard){
+
+	string userInput;
+	const string MENU_SENTINEL = "b";
+	int playerChoice;
+	Card* targetCard;
+
+	while(true){
+
+		cout << "Please select a card to play:" << endl;
+		cout << "Card #|----Name----| Mana Cost | Attack | Defense |" << endl;
+
+		for(int i = 0; i < playerBoard.getHandSize(); i++){
+
+			targetCard = playerBoard.getCardInHand(i);
+
+			cout << left << setw(6) << setfill('.') << i + 1;
+			cout << setw(1) << "|" << setfill(' ') << setw(12) << targetCard->getName();
+			cout << right << setw(1) << "|" << setw(10) << targetCard->getManaCost();
+			cout << setw(1) << " |" << setw(7) << targetCard->getAttack();
+			cout << setw(1) << " |" << setw(8) << targetCard->getDefense();
+			cout << setw(1) << " |" << endl;
+
+		}
+		cout << "(To return to the main menu, type b)" << endl;
+
+		cin >> userInput;
+
+		if(userInput == MENU_SENTINEL){
+
+			return -1;
+
+		} 
+
+		playerChoice = stoi(userInput);
+
+		if((playerBoard.getCardInHand(playerChoice - 1) != NULL) && (playerBoard.getCardInHand(playerChoice - 1)->getManaCost() <= playerBoard.getMana())){
+
+			break;
+
+		} else {
+
+			cout << "Error! Please select a valid option" << endl;
+
+		}
+
+	}
+
+	return playerChoice - 1;
+}
+
+int getFieldChoice(Board& playerBoard){
+
+	string userInput;
+	const string MENU_SENTINEL = "b";
+	int playerChoice;
+	Card* targetCard;
+
+	while(true){
+
+		cout << "Please select a card to attack with:" << endl;
+		cout << "Card #|----Name----| Attack | Defense | Exhausted |" << endl;
+
+		for(int i = 0; i < playerBoard.getFieldSize(); i++){
+
+			targetCard = playerBoard.getCardOnField(i);
+
+			cout << left << setw(6) << setfill('.') << i + 1;
+			cout << setw(1) << "|" << setfill(' ') << setw(12) << targetCard->getName();
+			cout << right << setw(1) << "|" << setw(7) << targetCard->getAttack();
+			cout << setw(1) << " |" << setw(8) << targetCard->getDefense();
+			cout << setw(1) << " |" << setw(10);
+			if(targetCard->isExhausted()){
+
+				cout << "Yes";
+
+			} else {
+
+				cout << "No";
+
+			}
+			cout << setw(1) << " |" << endl;
+
+		}
+		cout << "(To return to the main menu, type b)" << endl;
+
+		cin >> userInput;
+
+		if(userInput == MENU_SENTINEL){
+
+			return -1;
+
+		} 
+
+		playerChoice = stoi(userInput);
+
+		if(playerBoard.getCardOnField(playerChoice - 1) != NULL){
+
+			if (playerBoard.getCardOnField(playerChoice - 1)->isExhausted()){
+
+				cout << "Error! Please select a card that is not currently exhausted" << endl;
+
+			} else {
+
+				break;
+
+			}
+
+		} else {
+
+			cout << "Error! Please select a valid option" << endl;
+
+		}
+
+	}
+
+	return playerChoice - 1;
+}
+
+int getOpponentFieldTarget(Card* playerCard, Board& opponentBoard){
+
+	string userInput;
+	const string MENU_SENTINEL = "b";
+	const string DIRECT_ATTACK_SENTINEL = "z";
+	int targetChoice;
+	Card* targetCard;
+
+	while(true){
+
+		cout << "Please select a card to attack:" << endl;
+		cout << "Card #|----Name----| Attack | Defense |" << endl;
+
+		for(int i = 0; i < opponentBoard.getFieldSize(); i++){
+
+			targetCard = opponentBoard.getCardOnField(i);
+
+			cout << left << setw(6) << setfill('.') << i + 1;
+			cout << setw(1) << "|" << setfill(' ') << setw(12) << targetCard->getName();
+			cout << right << setw(1) << "|" << setw(7) << targetCard->getAttack();
+			cout << setw(1) << " |" << setw(8) << targetCard->getDefense();
+			cout << setw(1) << " |" << endl;
+
+		}
+		cout << "To attack your opponent directly, press z" << endl;
+		cout << "(To return to the main menu, type b)" << endl;
+
+		cin >> userInput;
+
+		if(userInput == MENU_SENTINEL){
+
+			return -1;
+
+		}
+
+		if(userInput == DIRECT_ATTACK_SENTINEL){
+
+			return -5;
+
+		} 
+
+		targetChoice = stoi(userInput);
+
+		if(opponentBoard.getCardOnField(targetChoice - 1) != NULL){
+
+			if(playerCard->getAttack() > opponentBoard.getCardOnField(targetChoice - 1)->getDefense()){
+
+				break;
+
+			} else {
+
+				cout << "Error! The card you previously selected is not strong enough to defeat this card" << endl;
+
+			}
+
+		} else {
+
+			cout << "Error! Please select a valid option" << endl;
+
+		}
+
+	}
+
+	return targetChoice - 1;
 }
 
 void createRandomDeck(Board& targetBoard){
@@ -195,233 +483,9 @@ void createRandomDeck(Board& targetBoard){
 				break;
 
 		}
-
 		targetBoard.addToDeckList(newCard);
-
 	}
-
 	targetBoard.shuffleDeck();
 	
-
 	return;
 }
-
-int getMenuChoice(Board& playerBoard, int turnNumber){
-
-	int playerChoice;
-
-	while(true){
-
-		cout << "Turn Number: " << turnNumber << endl;
-		cout << "What would you like to do?" << endl;
-
-		if((playerBoard.getHandSize() > 0) && (playerBoard.getMana() > 0)){
-
-			cout << "0: Play Card from Hand" << endl;
-
-		}
-
-		if(playerBoard.getFieldSize() > 0){
-
-			cout << "1: Attack with Creature" << endl;
-
-		}
-
-		cout << "2: End Turn" << endl;
-
-		cin >> playerChoice;
-
-		if(playerChoice == 0 || playerChoice == 1 || playerChoice == 2){
-
-			break;
-
-		} else {
-
-			cout << "Error! Please select a valid option" << endl;
-
-		}
-
-	}
-
-	return playerChoice;
-}
-
-void getPlayerAction(Board& playerBoard, Board& opponentBoard, int turnNumber){
-
-	int option;
-	int handChoice;
-	int attackChoice;
-	int targetIndex;
-	bool turnNotOver = true;
-
-	while(turnNotOver){
-
-		option = getMenuChoice(playerBoard, turnNumber);
-
-		switch(option){
-
-			case 0:
-				// Play Card from Hand
-				handChoice = getHandChoice(playerBoard);
-				if(handChoice == -1){
-					break;
-				} else {
-					playerBoard.playCardFromHand(handChoice);
-				}
-				break;
-
-			case 1:
-				// Attack with Creature
-				attackChoice = getFieldChoice(playerBoard);
-				if(attackChoice == -1){
-					break;
-				} else {
-					// get target for attack
-					// look through all cards on player's board. If the card is capable of killing one of those, it will chose the first one as its target
-					targetIndex = -1;
-					for(int j = 0; j < opponentBoard.getFieldSize(); j++){
-						if(playerBoard.getCardOnField(attackChoice)->getAttack() > opponentBoard.getCardOnField(j)->getDefense()){
-						    targetIndex = j;
-						    break;
-						}
-					}
-					if(targetIndex != -1){
-						// destory creature
-						cout << "Your " << playerBoard.getCardOnField(attackChoice)->getName() << " destoryed your opponent's " << opponentBoard.getCardOnField(targetIndex)->getName() << "!" << endl;
-						opponentBoard.discardCardFromField(targetIndex);
-						renderBoard(playerBoard, opponentBoard);
-					} else {
-						// player's creature attacks opponent directly
-						cout << "Your " << playerBoard.getCardOnField(attackChoice)->getName() << " attacks your opponent directly for " << playerBoard.getCardOnField(attackChoice)->getAttack() << " damage!" << endl;
-						opponentBoard.setHP(opponentBoard.getHP() - playerBoard.getCardOnField(attackChoice)->getAttack());
-					}
-				}
-				break;
-
-			case 2:
-				// End Turn
-				turnNotOver = false;
-				break;
-
-			default:
-				break;
-
-		}
-	}
-	
-
-	return;
-}
-
-int getHandChoice(Board& playerBoard){
-
-	string userInput;
-	const string SENTINEL = "b";
-	int playerChoice;
-	Card* targetCard;
-
-	while(true){
-
-		cout << "Please select a card to play:" << endl;
-		cout << "Card #|----Name----| Mana Cost | Attack | Defense |" << endl;
-
-		for(int i = 0; i < playerBoard.getHandSize(); i++){
-
-			targetCard = playerBoard.getCardInHand(i);
-
-			cout << left << setw(6) << setfill('.') << i + 1;
-			cout << setw(1) << "|" << setfill(' ') << setw(12) << targetCard->getName();
-			cout << right << setw(1) << "|" << setw(10) << targetCard->getManaCost();
-			cout << setw(1) << " |" << setw(7) << targetCard->getAttack();
-			cout << setw(1) << " |" << setw(8) << targetCard->getDefense();
-			cout << setw(1) << " |" << endl;
-
-		}
-		cout << "(To return to the previous menu, type b)" << endl;
-
-		cin >> userInput;
-
-		if(userInput == SENTINEL){
-
-			return -1;
-
-		} 
-
-		playerChoice = stoi(userInput);
-
-		if((playerChoice > 0) && (playerChoice <= playerBoard.getHandSize()) && (playerBoard.getCardInHand(playerChoice - 1)->getManaCost() <= playerBoard.getMana())){
-
-			break;
-
-		} else {
-
-			cout << "Error! Please select a valid option" << endl;
-
-		}
-
-	}
-
-	return playerChoice - 1;
-}
-
-int getFieldChoice(Board& playerBoard){
-
-	string userInput;
-	const string SENTINEL = "b";
-	int playerChoice;
-	Card* targetCard;
-
-	while(true){
-
-		cout << "Please select a card to attack with:" << endl;
-		cout << "Card #|----Name----| Attack | Defense | Exhausted |" << endl;
-
-		for(int i = 0; i < playerBoard.getFieldSize(); i++){
-
-			targetCard = playerBoard.getCardOnField(i);
-
-			cout << left << setw(6) << setfill('.') << i + 1;
-			cout << setw(1) << "|" << setfill(' ') << setw(12) << targetCard->getName();
-			cout << right << setw(1) << "|" << setw(7) << targetCard->getAttack();
-			cout << setw(1) << " |" << setw(8) << targetCard->getDefense();
-			cout << setw(1) << " |" << setw(10);
-			if(targetCard->isExhausted()){
-
-				cout << "Yes";
-
-			} else {
-
-				cout << "No";
-
-			}
-			cout << setw(1) << " |" << endl;
-
-		}
-		cout << "(To return to the previous menu, type b)" << endl;
-
-		cin >> userInput;
-
-		if(userInput == SENTINEL){
-
-			return -1;
-
-		} 
-
-		playerChoice = stoi(userInput);
-
-		if((playerChoice > 0) && (playerChoice <= playerBoard.getFieldSize()) && !(playerBoard.getCardOnField(playerChoice)->isExhausted())){
-
-			break;
-
-		} else {
-
-			cout << "Error! Please select a valid option" << endl;
-
-		}
-
-	}
-
-	return playerChoice - 1;
-}
-
-

@@ -38,6 +38,7 @@ class Card{
         int getAttack(void);
         int getDefense(void);
         bool isExhausted(void);
+	void setExhausted(void);
         void unExhaust(void);
 };
 

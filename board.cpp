@@ -36,10 +36,9 @@ void Board::playCardFromHand(int cNum){
 		
 		Card* temp = hand.at(cNum);
 		field.push_back(temp);
-		
 		hand.erase(hand.begin() + cNum);
 
-		setMana(getMana() - hand.at(cNum)->getManaCost());
+		setMana(getMana() - field.back()->getManaCost());
 
 	} else {
 		cout << "Problem is in playCardFromHand" << endl;
@@ -50,24 +49,28 @@ void Board::playCardFromHand(int cNum){
 
 Card* Board::getCardOnField(int cNum){
 
-	if(!(field.empty()) && (cNum >= 0) && (cNum < field.size())){
+	if((cNum >= 0) && (cNum < field.size())){
 
 		return field.at(cNum);
 
 	} else {
 		cout << "Problem is in getCardOnField" << endl;
+		return nullptr;
 	}
 }
 
 Card* Board::getCardInHand(int cNum){
 
-	if(!(hand.empty()) && (cNum >= 0) && (cNum < hand.size())){
+	if(!hand.empty()){
 
-		return hand.at(cNum);
+		if((cNum >= 0) && (cNum < hand.size())){
 
-	} else {
-		cout << "Problem is in getCardInHand" << endl;
+			return hand.at(cNum);
+
+		}
 	}
+ 	cout << "Problem is in getCardInHand" << endl;
+	return nullptr;
 }
 
 int Board::getHP(void){
