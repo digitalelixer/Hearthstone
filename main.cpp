@@ -130,8 +130,8 @@ void getOpponentAction(Board & playerBoard, Board & opponentBoard){
                 }
             }
             if(targetIndex != -1){
-                // destory creature
-                cout << "Opponent's " << opponentBoard.getCardOnField(i)->getName() << " destoryed your " << playerBoard.getCardOnField(targetIndex)->getName() << "!" << endl;
+                // destroy creature
+                cout << "Opponent's " << opponentBoard.getCardOnField(i)->getName() << " destroyed your " << playerBoard.getCardOnField(targetIndex)->getName() << "!" << endl;
                 playerBoard.discardCardFromField(targetIndex);
                 renderBoard(playerBoard, opponentBoard);
             } else {
@@ -184,8 +184,8 @@ void getPlayerAction(Board& playerBoard, Board& opponentBoard, int turnNumber){
 						break;
 					} 
 					if(targetIndex != -5){
-						// destory creature
-						cout << "Your " << playerBoard.getCardOnField(attackChoice)->getName() << " destoryed your opponent's " << opponentBoard.getCardOnField(targetIndex)->getName() << "!" << endl;
+						// destroy creature
+						cout << "Your " << playerBoard.getCardOnField(attackChoice)->getName() << " destroyed your opponent's " << opponentBoard.getCardOnField(targetIndex)->getName() << "!" << endl;
 						opponentBoard.discardCardFromField(targetIndex);
 //						renderBoard(playerBoard, opponentBoard);
 					} else {

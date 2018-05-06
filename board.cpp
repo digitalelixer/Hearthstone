@@ -46,8 +46,6 @@ void Board::playCardFromHand(int cNum){
 
 		setMana(getMana() - field.back()->getManaCost());
 
-	} else {
-		cout << "Problem is in playCardFromHand" << endl;
 	}
 
 	return;
@@ -60,7 +58,6 @@ Card* Board::getCardOnField(int cNum){
 		return field.at(cNum);
 
 	} else {
-		cout << "Problem is in getCardOnField" << endl;
 		return nullptr;
 	}
 }
@@ -75,7 +72,6 @@ Card* Board::getCardInHand(int cNum){
 
 		}
 	}
- 	cout << "Problem is in getCardInHand" << endl;
 	return nullptr;
 }
 
