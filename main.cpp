@@ -44,7 +44,13 @@ int main(int argc, char * arv[]){
     // Create opponent deck and draw initial hand here:
 	createRandomDeck(ob);
 	ob.draw(5);
-    
+	//if 0 player goes first, if 1 CPU goes first
+    int coinFlip = rand() % 2;
+	if(coinFlip == 0){
+		cout << "Heads! Player goes first." << endl;
+	} else {
+		cout << "Tails! CPU goes first. " << endl;
+	}
     while(pb.getHP() > 0 && ob.getHP() > 0){
         // Take turns here:
 
@@ -53,8 +59,19 @@ int main(int argc, char * arv[]){
 		ob.setMaxMana(turn);
 		ob.setMana(turn);
 
-		getPlayerAction(pb, ob, turn);
-		getOpponentAction(pb, ob);
+		if(coinFlip == 0){
+			getPlayerAction(pb, ob, turn);
+			if(pb.getHP() <= 0 || ob.getHP() <= 0){
+				break;
+			}
+			getOpponentAction(pb, ob);
+		} else {
+			getOpponentAction(pb, ob);
+			if(pb.getHP() <= 0 || ob.getHP() <= 0){
+				break;
+			}
+			getPlayerAction(pb, ob, turn);
+		}
 
 		pb.unExhaustField();
 		ob.unExhaustField();
@@ -66,7 +83,12 @@ int main(int argc, char * arv[]){
         turn++;
     }
     
-    
+    if(pb.getHP() > 0){
+		cout << "Player wins!" << endl;
+	} else {
+		cout << "CPU wins!" << endl;
+	}
+
     return 0;
 }
 

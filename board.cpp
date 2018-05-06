@@ -13,6 +13,12 @@ void Board::addToDeckList(Card* card){
 
 void Board::draw(int numCards){
 
+	if(deck.empty()){
+		cout << "No cards left in deck. HP reduced by 50\%." << endl;
+		setHP(getHP() / 2);
+		return;
+	}
+
 	if(!(deck.empty()) && (numCards > 0) && (numCards <= deck.size())){
 
 		Card* temp;
@@ -26,7 +32,7 @@ void Board::draw(int numCards){
 		}
 
 	}
-
+	
 	return;
 }
 
