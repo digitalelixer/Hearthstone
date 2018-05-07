@@ -13,6 +13,12 @@ void Board::addToDeckList(Card* card){
 
 void Board::draw(int numCards){
 
+	if(deck.empty()){
+		cout << "No cards left in deck. HP reduced by 50\%." << endl;
+		setHP(getHP() / 2);
+		return;
+	}
+
 	if(!(deck.empty()) && (numCards > 0) && (numCards <= deck.size())){
 
 		Card* temp;
@@ -26,7 +32,7 @@ void Board::draw(int numCards){
 		}
 
 	}
-
+	
 	return;
 }
 
@@ -40,8 +46,6 @@ void Board::playCardFromHand(int cNum){
 
 		setMana(getMana() - field.back()->getManaCost());
 
-	} else {
-		cout << "Problem is in playCardFromHand" << endl;
 	}
 
 	return;
@@ -54,7 +58,6 @@ Card* Board::getCardOnField(int cNum){
 		return field.at(cNum);
 
 	} else {
-		cout << "Problem is in getCardOnField" << endl;
 		return nullptr;
 	}
 }
@@ -69,7 +72,6 @@ Card* Board::getCardInHand(int cNum){
 
 		}
 	}
- 	cout << "Problem is in getCardInHand" << endl;
 	return nullptr;
 }
 
