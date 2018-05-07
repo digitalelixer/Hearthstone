@@ -83,7 +83,6 @@ int main(int argc, char * arv[]){
 		system("sleep 1");
         turn++;
     }
-<<<<<<< HEAD
    	cout << "Would you like to save the deck you used in this game to a file?" << endl;
 	cout << "0: Save deck to file" << endl;
 	cout << "1: Decline" << endl;
@@ -96,15 +95,12 @@ int main(int argc, char * arv[]){
 
 	}
     
-=======
-    
     if(pb.getHP() > 0){
 		cout << "Player wins!" << endl;
 	} else {
 		cout << "CPU wins!" << endl;
 	}
 
->>>>>>> f8b2727dd14b8795835ea88d7f863d65e8efa90e
     return 0;
 }
 
