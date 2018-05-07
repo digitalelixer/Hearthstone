@@ -3,7 +3,21 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <unordered_map>
+#include <utility>
 #include "card.h"
+
+#include "direRabbit.h"
+#include "dragon.h"
+#include "evilEye.h"
+#include "goblin.h"
+#include "golem.h"
+#include "hobgoblin.h"
+#include "magicSword.h"
+#include "wargWolf.h"
+#include "wizard.h"
+#include "wraith.h"
 
 class Board{
     private:
@@ -13,6 +27,8 @@ class Board{
         int mana;
         // The max amount of mana available per turn. Should be equal to the current turn.
         int maxMana;
+	// The maximum deck size
+	const int MAX_DECK_SIZE = 20;
     
         /* deck
          * 
@@ -38,6 +54,13 @@ class Board{
          * This vector contains pointers to all the cards on the field.
          */
         vector<Card*> field;
+
+
+	bool fileExists(string filename){
+
+		ifstream in_file(filename);
+		return in_file.good();
+	}
     
     public:
         /* Constructor for Board
@@ -46,6 +69,14 @@ class Board{
          * to 2000 when called.
          */
         Board(void);
+
+        /* getMaxDeckSize
+         *
+         * This function returns MAX_DECK_SIZE
+         */
+	int getMaxDeckSize(void){
+		return MAX_DECK_SIZE;
+	}
         
         /* addToDeckList
          *
@@ -169,6 +200,18 @@ class Board{
          * Draws the cards in the field vector to the console.
          */
         void renderField(void);
+
+	/* populateFromFile
+         *
+         * Loads a deck from a save file
+         */
+	void populateFromFile(void);
+
+	/* saveToFile
+         *
+         * Saves a deck to a file
+         */
+	void saveToFile(void);
 };
 
 

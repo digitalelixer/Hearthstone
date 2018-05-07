@@ -6,19 +6,6 @@
 #include "card.h"
 #include "board.h"
 
-#include "direRabbit.h"
-#include "dragon.h"
-#include "evilEye.h"
-#include "goblin.h"
-#include "golem.h"
-#include "hobgoblin.h"
-#include "magicSword.h"
-#include "wargWolf.h"
-#include "wizard.h"
-#include "wraith.h"
-
-const int INITIAL_DECK_SIZE = 20;
-
 using namespace std;
 
 void getOpponentAction(Board&, Board&);
@@ -37,8 +24,22 @@ int main(int argc, char * arv[]){
     // Set up Player board
     Board pb;
     // Create player deck and draw initial hand here:
-	createRandomDeck(pb);
+	string deckOption;
+	cout << "Would you like to load a previously saved deck, or have one chosen randomly for you?" << endl;
+	cout << "0: Load deck from save file" << endl;
+	cout << "1: Random" << endl;
+	cin >> deckOption;
+	if(deckOption == "0"){
+
+		pb.populateFromFile();
+
+	} else {
+
+		createRandomDeck(pb);
+
+	}
 	pb.draw(5);
+
     // Set up opponent board
     Board ob;
     // Create opponent deck and draw initial hand here:
@@ -65,7 +66,17 @@ int main(int argc, char * arv[]){
 		system("sleep 1");
         turn++;
     }
-    
+   	cout << "Would you like to save the deck you used in this game to a file?" << endl;
+	cout << "0: Save deck to file" << endl;
+	cout << "1: Decline" << endl;
+	cin >> deckOption;
+	if(deckOption == "0"){
+
+		pb.saveToFile();
+
+	} else {
+
+	}
     
     return 0;
 }
@@ -421,7 +432,7 @@ void createRandomDeck(Board& targetBoard){
 	int cardNum;
 	Card* newCard;
 
-	for(int i = 0; i < INITIAL_DECK_SIZE; i++){
+	for(int i = 0; i < targetBoard.getMaxDeckSize(); i++){
 
 		cardNum = rand() % 10 + 1;
 

@@ -181,3 +181,205 @@ void Board::renderField(void){
             cout << endl;
     }
 }
+
+void Board::populateFromFile(void){
+
+	string filename;
+	string cardName;
+	ifstream save_file;
+	int cardNum;
+	Card* newCard;
+	int lineCounter = 1;
+	bool unrecognizedCardNamesError = false;
+	
+	deck.clear();
+
+	// Holds card mappings for populateFromFile
+	unordered_map<string, int> cardNameMappings;
+	cardNameMappings["Dire Rabbit"] = 1;
+	cardNameMappings["Dragon"] = 2;
+	cardNameMappings["Evil Eye"] = 3;
+	cardNameMappings["Goblin"] = 4;
+	cardNameMappings["Golem"] = 5;
+	cardNameMappings["Hobgoblin"] = 6;
+	cardNameMappings["Magic Sword"] = 7;
+	cardNameMappings["Warg Wolf"] = 8;
+	cardNameMappings["Wizard"] = 9;
+	cardNameMappings["Wraith"] = 10;
+
+	while(true){
+
+		cout << "Please select a filename (including .txt file extension) to load a deck from: " << endl;
+		cin >> filename;
+
+		if(!fileExists(filename)){
+
+			cout << "Error! File not found!" << endl;
+
+		} else {
+
+			break;
+
+		}
+
+	}
+	save_file.open(filename);
+
+	while((!save_file.fail()) && (!save_file.eof()) && (lineCounter < getMaxDeckSize())){
+
+		getline(save_file, cardName);
+		auto pos = cardNameMappings.find(cardName);
+		if(pos == cardNameMappings.end()){
+
+			unrecognizedCardNamesError = true;
+			break;
+
+		}
+		lineCounter++;
+	}
+	if(save_file.fail()){
+
+		cout << "Error! An unknown error has occurred" << endl;
+		populateFromFile();
+
+	} else if(lineCounter < getMaxDeckSize()){
+
+		cout << "Error! The chosen save file appears to have fewer than the required " << getMaxDeckSize() << " cards" << endl;
+		populateFromFile();
+
+	} else if(unrecognizedCardNamesError){
+
+		cout << "Error! The chosen save file contains unrecognized card names" << endl;
+		populateFromFile();
+
+	} else {
+
+		save_file.clear();
+		save_file.seekg(0, ios::beg);
+		for(int index = 0; index < getMaxDeckSize(); index++){
+
+			getline(save_file, cardName);
+
+			switch(cardNameMappings.at(cardName)){
+
+				case 1:
+					// DireRabbit
+					newCard = new DireRabbit();
+					break;
+
+				case 2:
+					// Dragon
+					newCard = new Dragon();
+					break;
+
+				case 3:
+					// EvilEye
+					newCard = new EvilEye();
+					break;
+
+				case 4:
+					// Goblin
+					newCard = new Goblin();
+					break;
+
+				case 5:
+					// Golem
+					newCard = new Golem();
+					break;
+
+				case 6:
+					// Hobgoblin
+					newCard = new Hobgoblin();
+					break;
+
+				case 7:
+					// MagicSword
+					newCard = new MagicSword();
+					break;
+
+				case 8:
+					// WargWolf
+					newCard = new WargWolf();
+					break;
+
+				case 9:
+					// Wizard
+					newCard = new Wizard();
+					break;
+
+				case 10:
+					// Wraith
+					newCard = new Wraith();
+					break;
+
+				default:
+					// Goblin
+					newCard = new Goblin();
+					break;
+
+			}
+			addToDeckList(newCard);
+
+		}
+
+	}
+	
+	return;
+}
+
+void Board::saveToFile(void){
+
+	string filename;
+	string overwriteFileChoice;
+	ofstream save_file;
+
+	while(true){
+
+		cout << "Please select a filename (including .txt file extension) to save your current deck to: " << endl;
+		cin >> filename;
+
+		if(fileExists(filename)){
+
+			cout << "Warning! File \"" << filename << "\" already exists and will be overwritten! Proceed? (y/n)" << endl;
+			cin >> overwriteFileChoice;
+			
+			if(overwriteFileChoice == "y"){
+
+				break;
+
+			}
+
+
+		} else {
+
+			break;
+
+		}
+
+	}
+	save_file.open(filename);
+
+	for(int index = 0; index < deck.size(); index++){
+
+		save_file << deck.at(index)->getName() << endl;
+
+	}
+	for(int index = 0; index < hand.size(); index++){
+
+		save_file << hand.at(index)->getName() << endl;
+
+	}
+	for(int index = 0; index < field.size(); index++){
+
+		save_file << field.at(index)->getName() << endl;
+
+	}
+	for(int index = 0; index < discard.size(); index++){
+
+		save_file << discard.at(index)->getName() << endl;
+
+	}
+	save_file.close();
+	
+	return;
+}
